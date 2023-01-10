@@ -1,24 +1,58 @@
-import { flatten } from "./example";
+import { recordOfDuplicateEmails as fn } from "./example";
 import { TestCases, runTestCases } from "./utils";
 
-describe("#" + flatten.name, () => {
-  it("flattens non empty array", () => {
-    const testCases: TestCases<typeof flatten> = [
-      [[[1, 2, 3, 4, 5, 6, 7]], [1, 2, 3, 4, 5, 6, 7]],
-      [[[1, [2, [3, [4, [5, [6, [7]]]]]]]], [1, 2, 3, 4, 5, 6, 7]],
-      [[[[], [[[1]]], [[]], [[[], [2]]]]], [1, 2]],
+describe("#" + fn.name, () => {
+  test("returns correct record", () => {
+    const testCases: TestCases<typeof fn> = [
+      [
+        [
+          [
+            {
+              email: "a@a.com",
+              contacts: ["b@b.com", "c@c.com"],
+            },
+            {
+              email: "b@b.com",
+              contacts: ["c@c.com"],
+            },
+            {
+              email: "d@d.com",
+              contacts: ["z@z.com"],
+            }
+          ],
+        ],
+        {
+          "c@c.com": ["a@a.com", "b@b.com"],
+        },
+      ],
+      [
+        [
+          [
+            {
+              email: "a@a.com",
+              contacts: [],
+            },
+            {
+              email: "b@b.com",
+              contacts: [],
+            },
+          ],
+        ],
+        {},
+      ],
+      [
+        [
+          [
+            {
+              email: "x@y.z",
+              contacts: ["a@a.com", "b@b.com"],
+            },
+          ],
+        ],
+        {},
+      ],
     ];
 
-    runTestCases(flatten, testCases);
-  });
-
-  it("flattens empty array", () => {
-    const testCases: TestCases<typeof flatten> = [
-      [[[]], []],
-      [[[[[[[[[]]]]]]]], []],
-      [[[[], [[[]]], [[]], [[[], []]]]], []],
-    ];
-
-    runTestCases(flatten, testCases);
+    runTestCases(fn, testCases);
   });
 });
